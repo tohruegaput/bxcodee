@@ -8,10 +8,188 @@
     <link rel="manifest" href="./favicon/site.webmanifest">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="./css/main.css">
+    
     <title>TikTok Downloader | @BXCODE</title>
+    
+    <!-- Custom Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --base-font-size: 16px;
+        }
+        body {
+            font-size: var(--base-font-size);
+        }
+        body.roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+        body.opensans {
+            font-family: 'Open Sans', sans-serif;
+        }
+        @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.animate-pulse {
+    animation: pulse 0.5s ease-in-out;
+}
+    </style>
+    <script>
+    	document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    // Fungsi untuk mengatur tema
+    function setTheme(theme) {
+        if (theme === 'dark') {
+            htmlElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            htmlElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // Toggle tema
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
+        setTheme(currentTheme);
+    });
+
+    // Cek tema tersimpan saat halaman dimuat
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeSettingsBtn = document.getElementById('close-settings');
+    const saveSettingsBtn = document.getElementById('save-settings');
+
+    const themeSelect = document.getElementById('theme-select');
+    const fontSelect = document.getElementById('font-select');
+    const fontSizeRange = document.getElementById('font-size-range');
+    const fontSizeDisplay = document.getElementById('font-size-display');
+
+    // Tampilkan/sembunyikan modal pengaturan
+    settingsBtn.addEventListener('click', () => {
+        settingsModal.classList.remove('hidden');
+    });
+
+    closeSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('hidden');
+    });
+
+    // Update tampilan ukuran font saat range berubah
+    fontSizeRange.addEventListener('input', () => {
+        fontSizeDisplay.textContent = `${fontSizeRange.value}px`;
+    });
+
+    saveSettingsBtn.addEventListener('click', () => {
+        // Simpan pengaturan
+        localStorage.setItem('theme', themeSelect.value);
+        localStorage.setItem('font', fontSelect.value);
+        localStorage.setItem('fontSize', fontSizeRange.value);
+
+        // Terapkan tema
+        const htmlElement = document.documentElement;
+        if (themeSelect.value === 'dark') {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        // Terapkan font
+        document.body.className = fontSelect.value;
+
+        // Terapkan ukuran font
+        document.documentElement.style.setProperty('--base-font-size', `${fontSizeRange.value}px`);
+
+        settingsModal.classList.add('hidden');
+    });
+
+    // Muat pengaturan tersimpan saat halaman dimuat
+    const savedTheme = localStorage.getItem('theme');
+    const savedFont = localStorage.getItem('font');
+    const savedFontSize = localStorage.getItem('fontSize');
+
+    if (savedTheme) {
+        themeSelect.value = savedTheme;
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    }
+
+    if (savedFont) {
+        fontSelect.value = savedFont;
+        document.body.className = savedFont;
+    }
+
+    if (savedFontSize) {
+        fontSizeRange.value = savedFontSize;
+        fontSizeDisplay.textContent = `${savedFontSize}px`;
+        document.documentElement.style.setProperty('--base-font-size', `${savedFontSize}px`);
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // Animasi tambahan untuk elemen-elemen interaktif
+    const interactiveElements = document.querySelectorAll('button, a, input');
+    
+    interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+            element.classList.add('animate-pulse');
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            element.classList.remove('animate-pulse');
+        });
+    });
+});
+</script>
 </head>
 
 <body class="bg-gradient-to-br from-sky-50 to-blue-100 dark:from-neutral-900 dark:to-neutral-800 min-h-screen">
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white dark:bg-neutral-800 w-11/12 max-w-md mx-auto mt-20 p-6 rounded-lg shadow-xl">
+            <h2 class="text-2xl font-bold mb-4 dark:text-neutral-200">Website Settings</h2>
+            
+            <div class="mb-4">
+                <label class="block mb-2 dark:text-neutral-300">Theme</label>
+                <select id="theme-select" class="w-full p-2 border rounded">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="system">System Preference</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 dark:text-neutral-300">Font</label>
+                <select id="font-select" class="w-full p-2 border rounded">
+                    <option value="default">Default</option>
+                    <option value="roboto">Roboto</option>
+                    <option value="opensans">Open Sans</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 dark:text-neutral-300">Font Size</label>
+                <input type="range" id="font-size-range" min="12" max="24" value="16" class="w-full">
+                <span id="font-size-display" class="text-sm text-gray-600">16px</span>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <button id="close-settings" class="px-4 py-2 bg-gray-200 rounded">Close</button>
+                <button id="save-settings" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container mx-auto px-4 py-6 max-w-6xl">
         <!-- Enhanced Navigation -->
         <nav class="flex justify-between items-center border-b pb-4 dark:border-neutral-700">
@@ -28,16 +206,30 @@
                 <li><a href="http://wa.me/62856-9317-3193" target="_blank" class="nav-link">Contact</a></li>
                 <li>
                     <button id="theme-toggle" class="text-gray-600 dark:text-neutral-300 hover:text-blue-600">
-                        🌓 Toggle Theme
+                        🎉BXCODE UPDET 🎉
+                    </button>
+                </li>
+                <li>
+                    <button id="settings-btn" class="text-gray-600 dark:text-neutral-300 hover:text-blue-600">
+                        ⚙️ Settings
                     </button>
                 </li>
             </ul>
         </nav>
 
         <!-- Main Content -->
-        <div class="grid md:grid-cols-2 gap-8 mt-10 items-center">
+        <div class="flex flex-col-reverse md:grid md:grid-cols-2 gap-8 mt-10 items-center">
+            <!-- Mockup Image (Mobile) -->
+            <div class="block md:hidden mb-8 animate-fade-in">
+                <img 
+                    src="./assets/mock_x.png" 
+                    alt="TikTok Downloader Mockup" 
+                    class="w-full object-contain"
+                >
+            </div>
+
             <!-- Text Content -->
-            <div class="space-y-6">
+            <div class="space-y-6 animate-slide-up">
                 <h1 class="text-4xl lg:text-5xl font-bold text-center md:text-left dark:text-neutral-200">
                     Download TikTok Videos Without Watermarks
                 </h1>
@@ -77,16 +269,15 @@
                     <div class="feature-card">
                         <img src="./assets/watermark.png" alt="No Watermark">
                         <span>No Watermark</span>
-                    </div>
-                    <div class="feature-card">
+                                    <div class="feature-card">
                         <img src="./assets/unlimited.png" alt="Unlimited">
                         <span>Unlimited</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Mockup Image -->
-            <div class="hidden md:block">
+            <!-- Mockup Image (Desktop) -->
+            <div class="hidden md:block animate-fade-in">
                 <img 
                     src="./assets/mock_x.png" 
                     alt="TikTok Downloader Mockup" 
@@ -96,20 +287,6 @@
         </div>
     </div>
 
-    <script>
-        // Theme Toggle Script
-        const themeToggle = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-
-        themeToggle.addEventListener('click', () => {
-            htmlElement.classList.toggle('dark');
-            localStorage.setItem('theme', htmlElement.classList.contains('dark') ? 'dark' : 'light');
-        });
-
-        // Check saved theme on load
-        if (localStorage.getItem('theme') === 'dark') {
-            htmlElement.classList.add('dark');
-        }
-    </script>
+    
 </body>
-                        </html>
+    </html>
