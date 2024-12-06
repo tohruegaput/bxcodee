@@ -1,292 +1,446 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free TikTok Video Downloader - Download TikTok videos without watermarks">
-    <link rel="icon" href="./favicon/favicon.ico" sizes="any">
-    <link rel="manifest" href="./favicon/site.webmanifest">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <link rel="stylesheet" href="./css/main.css">
+    <title>TikTok Downloader Pro</title>
     
-    <title>TikTok Downloader | @BXCODE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Custom Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --base-font-size: 16px;
-        }
-        body {
-            font-size: var(--base-font-size);
-        }
-        body.roboto {
-            font-family: 'Roboto', sans-serif;
-        }
-        body.opensans {
-            font-family: 'Open Sans', sans-serif;
-        }
-        @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-.animate-pulse {
-    animation: pulse 0.5s ease-in-out;
-}
-    </style>
+    <!-- Custom Tailwind Configuration -->
     <script>
-    	document.addEventListener('DOMContentLoaded', () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    const htmlElement = document.documentElement;
-
-    // Fungsi untuk mengatur tema
-    function setTheme(theme) {
-        if (theme === 'dark') {
-            htmlElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            htmlElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            'bg-primary': '#121212',
+                            'bg-secondary': '#1E1E1E',
+                            'text-primary': '#E0E0E0',
+                            'text-secondary': '#A0A0A0'
+                        }
+                    }
+                }
+            }
         }
-    }
+    </script>
 
-    // Toggle tema
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
-        setTheme(currentTheme);
-    });
-
-    // Cek tema tersimpan saat halaman dimuat
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        setTheme(savedTheme);
-    }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const settingsBtn = document.getElementById('settings-btn');
-    const settingsModal = document.getElementById('settings-modal');
-    const closeSettingsBtn = document.getElementById('close-settings');
-    const saveSettingsBtn = document.getElementById('save-settings');
-
-    const themeSelect = document.getElementById('theme-select');
-    const fontSelect = document.getElementById('font-select');
-    const fontSizeRange = document.getElementById('font-size-range');
-    const fontSizeDisplay = document.getElementById('font-size-display');
-
-    // Tampilkan/sembunyikan modal pengaturan
-    settingsBtn.addEventListener('click', () => {
-        settingsModal.classList.remove('hidden');
-    });
-
-    closeSettingsBtn.addEventListener('click', () => {
-        settingsModal.classList.add('hidden');
-    });
-
-    // Update tampilan ukuran font saat range berubah
-    fontSizeRange.addEventListener('input', () => {
-        fontSizeDisplay.textContent = `${fontSizeRange.value}px`;
-    });
-
-    saveSettingsBtn.addEventListener('click', () => {
-        // Simpan pengaturan
-        localStorage.setItem('theme', themeSelect.value);
-        localStorage.setItem('font', fontSelect.value);
-        localStorage.setItem('fontSize', fontSizeRange.value);
-
-        // Terapkan tema
-        const htmlElement = document.documentElement;
-        if (themeSelect.value === 'dark') {
-            htmlElement.classList.add('dark');
-        } else {
-            htmlElement.classList.remove('dark');
+    <!-- Theme Management Script -->
+    <script>
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-toggle-dark').classList.add('hidden');
+                document.getElementById('theme-toggle-light').classList.remove('hidden');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-toggle-light').classList.add('hidden');
+                document.getElementById('theme-toggle-dark').classList.remove('hidden');
+                localStorage.setItem('theme', 'light');
+            }
         }
 
-        // Terapkan font
-        document.body.className = fontSelect.value;
-
-        // Terapkan ukuran font
-        document.documentElement.style.setProperty('--base-font-size', `${fontSizeRange.value}px`);
-
-        settingsModal.classList.add('hidden');
-    });
-
-    // Muat pengaturan tersimpan saat halaman dimuat
-    const savedTheme = localStorage.getItem('theme');
-    const savedFont = localStorage.getItem('font');
-    const savedFontSize = localStorage.getItem('fontSize');
-
-    if (savedTheme) {
-        themeSelect.value = savedTheme;
-        if (savedTheme === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
-    }
-
-    if (savedFont) {
-        fontSelect.value = savedFont;
-        document.body.className = savedFont;
-    }
-
-    if (savedFontSize) {
-        fontSizeRange.value = savedFontSize;
-        fontSizeDisplay.textContent = `${savedFontSize}px`;
-        document.documentElement.style.setProperty('--base-font-size', `${savedFontSize}px`);
-    }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    // Animasi tambahan untuk elemen-elemen interaktif
-    const interactiveElements = document.querySelectorAll('button, a, input');
-    
-    interactiveElements.forEach(element => {
-        element.addEventListener('mouseenter', () => {
-            element.classList.add('animate-pulse');
-        });
-        
-        element.addEventListener('mouseleave', () => {
-            element.classList.remove('animate-pulse');
-        });
-    });
-});
-</script>
-</head>
-
-<body class="bg-gradient-to-br from-sky-50 to-blue-100 dark:from-neutral-900 dark:to-neutral-800 min-h-screen">
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="bg-white dark:bg-neutral-800 w-11/12 max-w-md mx-auto mt-20 p-6 rounded-lg shadow-xl">
-            <h2 class="text-2xl font-bold mb-4 dark:text-neutral-200">Website Settings</h2>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             
-            <div class="mb-4">
-                <label class="block mb-2 dark:text-neutral-300">Theme</label>
-                <select id="theme-select" class="w-full p-2 border rounded">
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                    <option value="system">System Preference</option>
-                </select>
-            </div>
+            setTheme(savedTheme);
 
-            <div class="mb-4">
-                <label class="block mb-2 dark:text-neutral-300">Font</label>
-                <select id="font-select" class="w-full p-2 border rounded">
-                    <option value="default">Default</option>
-                    <option value="roboto">Roboto</option>
-                    <option value="opensans">Open Sans</option>
-                </select>
-            </div>
+            window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+                setTheme(e.matches ? 'dark' : 'light');
+            });
+        });
+    </script>
 
-            <div class="mb-4">
-                <label class="block mb-2 dark:text-neutral-300">Font Size</label>
-                <input type="range" id="font-size-range" min="12" max="24" value="16" class="w-full">
-                <span id="font-size-display" class="text-sm text-gray-600">16px</span>
-            </div>
+    <style>
+        html {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        html.dark {
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+    </style>
+</head>
+<body 
+    class="bg-white text-gray-900 
+           dark:bg-dark-bg-primary 
+           dark:text-dark-text-primary 
+           transition-colors duration-300"
+>
+    <!-- Tombol Theme Toggle -->
+    <div class="fixed top-4 right-4 z-50">
+        <!-- Tombol Dark Mode -->
+        <button 
+            id="theme-toggle-dark"
+            onclick="setTheme('dark')"
+            class="p-2 bg-gray-200 dark:bg-gray-700 
+                   rounded-full hover:bg-gray-300 
+                   dark:hover:bg-gray-600 
+                   transition-all"
+        >
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                class="h-6 w-6 text-gray-700 dark:text-yellow-300" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+            >
+                <path 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="2" 
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" 
+                />
+            </svg>
+        </button>
 
-            <div class="flex justify-end space-x-2">
-                <button id="close-settings" class="px-4 py-2 bg-gray-200 rounded">Close</button>
-                <button id="save-settings" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
-            </div>
-        </div>
+        <!-- Tombol Light Mode -->
+        <button 
+            id="theme-toggle-light"
+            onclick="setTheme('light')"
+            class="p-2 bg-gray-200 dark:bg-gray-700 
+                   rounded-full hover:bg-gray-300 
+                   dark:hover:bg-gray-600 
+                   transition-all hidden"
+        >
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                class="h-6 w-6 text-yellow-500" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+            >
+                <path 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="2" 
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m3.343-5.657L5.636 5.636m12.728 12.728L18.364 18.364M12 7a5 5 0 110 10 5 5 0 010-10z" 
+                />
+            </svg>
+        </button>
     </div>
 
-    <div class="container mx-auto px-4 py-6 max-w-6xl">
-        <!-- Enhanced Navigation -->
-        <nav class="flex justify-between items-center border-b pb-4 dark:border-neutral-700">
-            <div class="flex items-center space-x-4">
-                <a href="./" class="flex items-center">
-                    <img src="./assets/logo.png" alt="Logo" class="w-12 h-12 object-contain">
-                    <span class="hidden sm:block ml-3 font-bold text-2xl dark:text-neutral-200">
-                        TikTok Downloader
-                    </span>
-                </a>
-            </div>
-            <ul class="flex space-x-6 items-center">
-                <li><a href="./" class="nav-link">Home</a></li>
-                <li><a href="http://wa.me/62856-9317-3193" target="_blank" class="nav-link">Contact</a></li>
-                <li>
-                    <button id="theme-toggle" class="text-gray-600 dark:text-neutral-300 hover:text-blue-600">
-                        🎉BXCODE UPDET 🎉
-                    </button>
-                </li>
-                <li>
-                    <button id="settings-btn" class="text-gray-600 dark:text-neutral-300 hover:text-blue-600">
-                        ⚙️ Settings
-                    </button>
-                </li>
-            </ul>
-        </nav>
+    <main class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-16">
+            <h1 
+                class="text-4xl font-bold mb-4 
+                       bg-clip-text text-transparent 
+                       bg-gradient-to-r from-blue-600 to-purple-600"
+            >
+                TikTok Downloader Pro
+            </h1>
+            <p class="text-gray-600 dark:text-neutral-400 max-w-xl mx-auto">
+                Download video TikTok tanpa watermark dengan mudah dan cepat
+            </p>
+        </header>
 
-        <!-- Main Content -->
-        <div class="flex flex-col-reverse md:grid md:grid-cols-2 gap-8 mt-10 items-center">
-            <!-- Mockup Image (Mobile) -->
-            <div class="block md:hidden mb-8 animate-fade-in">
-                <img 
-                    src="./assets/mock_x.png" 
-                    alt="TikTok Downloader Mockup" 
-                    class="w-full object-contain"
+        <!-- Download Section -->
+        <section class="max-w-2xl mx-auto bg-white dark:bg-neutral-800 rounded-3xl p-8 shadow-xl">
+            <form class="space-y-4">
+                <div>
+                    <input 
+                        type="text" 
+                        placeholder="Masukkan URL TikTok" 
+                        class="w-full p-3 border rounded-xl 
+                               focus:outline-none focus:ring-2 
+                               focus:ring-blue-500 
+                               dark:bg-neutral-700 
+                               dark:border-neutral-600"
+                    >
+                </div>
+                <button 
+                    class="w-full bg-gradient-to-r from-blue-600 to-purple-600 
+                           text-white py-3 rounded-xl 
+                           hover:from-blue-700 hover:to-purple-700 
+                           transition-all transform hover:scale-105"
                 >
+                    Download Sekarang
+                </button>
+            </form>
+        </section>
+
+        <!-- Fitur Section -->
+        <section class="mt-16">
+            <div class="text-center mb-12">
+                <h3 
+                    class="text-3xl font-bold 
+                           bg-clip-text text-transparent 
+                           bg-gradient-to-r from-blue-600 to-purple-600"
+                >
+                    Fitur Unggulan
+                </h3>
             </div>
 
-            <!-- Text Content -->
-            <div class="space-y-6 animate-slide-up">
-                <h1 class="text-4xl lg:text-5xl font-bold text-center md:text-left dark:text-neutral-200">
-                    Download TikTok Videos Without Watermarks
-                </h1>
-                <p class="text-xl text-gray-600 dark:text-neutral-400 text-center md:text-left">
-                    Easy, Fast, and Free Video Downloading
-                </p>
+            <div class="grid md:grid-cols-3 gap-8">
+                                    <!-- Fitur Card Pertama -->
+                    <div 
+                        class="bg-white dark:bg-neutral-800 
+                               rounded-3xl p-6 shadow-xl 
+                               hover:shadow-2xl transition-all 
+                               group overflow-hidden relative"
+                    >
+                        <div 
+                            class="absolute top-0 left-0 w-full h-1 
+                                   bg-gradient-to-r from-blue-500 
+                                   to-indigo-600 
+                                   transform -translate-x-full 
+                                   group-hover:translate-x-0 
+                                   transition-transform duration-300"
+                        ></div>
+                        
+                        <div class="flex items-center mb-4">
+                            <svg 
+                                class="w-12 h-12 text-blue-600 mr-4" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24" 
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path 
+                                    stroke-linecap="round" 
+                                    stroke-linejoin="round" 
+                                    stroke-width="2" 
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" 
+                                />
+                            </svg>
+                            <h4 class="text-xl font-semibold dark:text-white">
+                                Tanpa Watermark
+                            </h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-neutral-400">
+                            Download video TikTok berkualitas tinggi tanpa watermark dengan sekali klik.
+                        </p>
+                    </div>
 
-                <!-- Enhanced Download Form -->
-                <form action="download.html" method="GET" class="w-full">
-                    <div class="flex rounded-lg overflow-hidden shadow-lg">
-                        <input 
-                            type="url" 
-                            name="url" 
-                            placeholder="Paste TikTok video link here" 
-                            required 
-                            class="w-full px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                        <button 
-                            type="submit" 
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-6 transition-colors"
-                        >
-                            Download
-                        </button>
+                    <!-- Fitur Card Kedua -->
+                    <div 
+                        class="bg-white dark:bg-neutral-800 
+                               rounded-3xl p-6 shadow-xl 
+                               hover:shadow-2xl transition-all 
+                               group overflow-hidden relative"
+                    >
+                        <div 
+                            class="absolute top-0 left-0 w-full h-1 
+                                   bg-gradient-to-r from-green-500 
+                                   to-teal-600 
+                                   transform -translate-x-full 
+                                   group-hover:translate-x-0 
+                                   transition-transform duration-300"
+                        ></div>
+                        
+                        <div class="flex items-center mb-4">
+                            <svg 
+                                class="w-12 h-12 text-green-600 mr-4" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24" 
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path 
+                                    stroke-linecap="round" 
+                                    stroke-linejoin="round" 
+                                    stroke-width="2" 
+                                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" 
+                                />
+                            </svg>
+                            <h4 class="text-xl font-semibold dark:text-white">
+                                Cepat & Aman
+                            </h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-neutral-400">
+                            Proses download tercepat dengan jaminan keamanan data privasi.
+                        </p>
                     </div>
-                </form>
 
-                <!-- Features Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                    <div class="feature-card">
-                        <img src="./assets/fast.png" alt="Fast Download">
-                        <span>Fast</span>
-                    </div>
-                    <div class="feature-card">
-                        <img src="./assets/mp3.png" alt="MP3 Convert">
-                        <span>MP3</span>
-                    </div>
-                    <div class="feature-card">
-                        <img src="./assets/watermark.png" alt="No Watermark">
-                        <span>No Watermark</span>
-                                    <div class="feature-card">
-                        <img src="./assets/unlimited.png" alt="Unlimited">
-                        <span>Unlimited</span>
+                    <!-- Fitur Card Ketiga -->
+                    <div 
+                        class="bg-white dark:bg-neutral-800 
+                               rounded-3xl p-6 shadow-xl 
+                               hover:shadow-2xl transition-all 
+                               group overflow-hidden relative"
+                    >
+                        <div 
+                            class="absolute top-0 left-0 w-full h-1 
+                                   bg-gradient-to-r from-red-500 
+                                   to-pink-600 
+                                   transform -translate-x-full 
+                                   group-hover:translate-x-0 
+                                   transition-transform duration-300"
+                        ></div>
+                        
+                        <div class="flex items-center mb-4">
+                            <svg 
+                                class="w-12 h-12 text-red-600 mr-4" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24" 
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path 
+                                    stroke-linecap="round" 
+                                    stroke-linejoin="round" 
+                                    stroke-width="2" 
+                                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" 
+                                />
+                            </svg>
+                            <h4 class="text-xl font-semibold dark:text-white">
+                                Multi-Format
+                            </h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-neutral-400">
+                            Download dalam berbagai format MP4, MP3, dan resolusi berbeda.
+                        </p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Mockup Image (Desktop) -->
-            <div class="hidden md:block animate-fade-in">
-                <img 
-                    src="./assets/mock_x.png" 
-                    alt="TikTok Downloader Mockup" 
-                    class="w-full object-contain"
-                >
-            </div>
-        </div>
-    </div>
+            <!-- Testimonial Section -->
+            <section class="mt-16">
+                <div class="text-center mb-12">
+                    <h3 
+                        class="text-3xl font-bold 
+                               bg-clip-text text-transparent 
+                               bg-gradient-to-r from-blue-600 to-purple-600"
+                    >
+                        Apa Kata Mereka
+                    </h3>
+                </div>
 
-    
-</body>
-    </html>
+                <div class="grid md:grid-cols-3 gap-8">
+                               <!-- Testimonial Card 1 -->
+                    <div 
+                        class="bg-white dark:bg-neutral-800 
+                               rounded-3xl p-6 shadow-xl 
+                               hover:shadow-2xl transition-all 
+                               relative overflow-hidden"
+                    >
+                        <div class="flex items-center mb-4">
+                            <img 
+                                src="https://randomuser.me/api/portraits/women/44.jpg" 
+                                alt="Testimonial" 
+                                class="w-16 h-16 rounded-full mr-4 object-cover"
+                            >
+                            <div>
+                                <h4 class="font-semibold dark:text-white">
+                                    Sarah Maharani
+                                </h4>
+                                <p class="text-sm text-gray-500 dark:text-neutral-400">
+                                    Content Creator
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-neutral-300 italic">
+                            "Aplikasi terbaik untuk download TikTok! Cepat, mudah, dan tanpa ribet. Sangat recommended!"
+                        </p>
+                    </div>
+
+                    <!-- Testimonial Card 2 -->
+                    <div 
+                        class="bg-white dark:bg-neutral-800 
+                               rounded-3xl p-6 shadow-xl 
+                               hover:shadow-2xl transition-all 
+                               relative overflow-hidden"
+                    >
+                        <div class="flex items-center mb-4">
+                            <img 
+                                src="https://randomuser.me/api/portraits/men/32.jpg" 
+                                alt="Testimonial" 
+                                class="w-16 h-16 rounded-full mr-4 object-cover"
+                            >
+                            <div>
+                                <h4 class="font-semibold dark:text-white">
+                                    Budi Santoso
+                                </h4>
+                                <p class="text-sm text-gray-500 dark:text-neutral-400">
+                                    Mahasiswa
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-neutral-300 italic">
+                            "Kualitas video tetap bagus setelah download. Fitur tanpa watermark memang keren!"
+                        </p>
+                    </div>
+
+                    <!-- Testimonial Card 3 -->
+                    <div 
+                        class="bg-white dark:bg-neutral-800 
+                               rounded-3xl p-6 shadow-xl 
+                               hover:shadow-2xl transition-all 
+                               relative overflow-hidden"
+                    >
+                        <div class="flex items-center mb-4">
+                            <img 
+                                src="https://randomuser.me/api/portraits/women/67.jpg" 
+                                alt="Testimonial" 
+                                class="w-16 h-16 rounded-full mr-4 object-cover"
+                            >
+                            <div>
+                                <h4 class="font-semibold dark:text-white">
+                                    Rina Kartika
+                                </h4>
+                                <p class="text-sm text-gray-500 dark:text-neutral-400">
+                                    Guru
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-neutral-300 italic">
+                            "Simple dan user-friendly. Cocok banget buat yang awam teknologi!"
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer 
+                class="mt-16 py-8 border-t 
+                       dark:border-neutral-700 
+                       text-center"
+            >
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-4 md:mb-0">
+                            <h4 
+                                class="text-2xl font-bold 
+                                       bg-clip-text text-transparent 
+                                       bg-gradient-to-r from-blue-600 to-purple-600"
+                            >
+                                TikTok Downloader Pro
+                            </h4>
+                            <p class="text-gray-500 dark:text-neutral-400 text-sm">
+                                © 2024 All Rights Reserved
+                            </p>
+                        </div>
+
+                        <div class="flex space-x-4">
+                            <a 
+                                href="#" 
+                                class="text-gray-600 dark:text-neutral-300 
+                                       hover:text-blue-600 
+                                       dark:hover:text-blue-400 
+                                       transition-colors"
+                            >
+                                Kebijakan Privasi
+                            </a>
+                            <a 
+                                href="#" 
+                                class="text-gray-600 dark:text-neutral-300 
+                                       hover:text-blue-600 
+                                       dark:hover:text-blue-400 
+                                       transition-colors"
+                            >
+                                Syarat Penggunaan
+                            </a>
+                            <a 
+                                href="#" 
+                                class="text-gray-600 dark:text-neutral-300 
+                                       hover:text-blue-600 
+                                       dark:hover:text-blue-400 
+                                       transition-colors"
+                            >
+      
