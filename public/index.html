@@ -146,32 +146,38 @@
         </header>
 
         <!-- Download Section -->
+       
         <section class="max-w-2xl mx-auto bg-white dark:bg-neutral-800 rounded-3xl p-8 shadow-xl">
-            <form class="space-y-4">
-                <div>
-                    <input 
-                        type="text" 
-                        placeholder="Get Url" 
-                        class="w-full p-3 border rounded-xl 
-                               focus:outline-none focus:ring-2 
-                               focus:ring-blue-500 
-                               dark:bg-neutral-700 
-                               dark:border-neutral-600"
-                    >
-                </div>
-                <form action="download.html" method="GET">
-    <button 
-        type="submit"
-        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 
-               text-white py-3 rounded-xl 
-               hover:from-blue-700 hover:to-purple-700 
-               transition-all transform hover:scale-105"
-    >
-                    Download Sekarang
-                </button>
-            </form>
-        </section>
-
+    <form action="download.html" method="GET" class="space-y-4">
+        <div>
+            <input 
+                type="text" 
+                name="url" 
+                placeholder="Tiktok link" 
+                required
+                class="w-full p-3 border rounded-xl 
+                       focus:outline-none focus:ring-2 
+                       focus:ring-blue-500 
+                       dark:bg-neutral-700 
+                       dark:border-neutral-600"
+            >
+        </div>
+        <button 
+            type="submit"
+            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 
+                   text-white py-3 rounded-xl 
+                   hover:from-blue-700 hover:to-purple-700 
+                   transition-all transform hover:scale-105"
+        >
+            Download Sekarang
+        </button>
+    </form>
+</section>
+                
+                
+           
+    
+        
         <!-- Fitur Section -->
         <section class="mt-16">
             <div class="text-center mb-12">
@@ -443,8 +449,7 @@
                             >
                                 Syarat Penggunaan
                             </a>
-                            <a 
-                              href="#" 
+                            <a href="#" 
                                 class="text-gray-600 dark:text-neutral-300 
                                        hover:text-blue-600 
                                        dark:hover:text-blue-400 
@@ -460,4 +465,4 @@
         </main>
     </body>
 </html>
-          
+         
